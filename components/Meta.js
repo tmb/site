@@ -3,9 +3,9 @@ import Head from 'next/head'
 export default ({
   name = 'Theo Bleier',
   title = 'Theo Bleier',
-  description = 'Theo Bleier\'s Website',
-  image = 'https://yourproject.now.sh/card.png',
-  url = 'https://yourproject.now.sh/'
+  description = 'Theo Bleier is a 16-year-old hacker. Right now, he works at Hack Club wearing many hats.',
+  image = 'https://tmb.sh/card.png',
+  url = 'https://tmb.sh',
 }) => (
   <Head>
     <title>{title}</title>
@@ -20,7 +20,7 @@ export default ({
     <meta property="og:image" content={image} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={image} />
-    <meta name="msapplication-TileColor" content={theme.colors.primary} />
-    <meta name="theme-color" content={theme.colors.primary} />
+    <meta name="msapplication-TileColor" content="#00caff" />
+    <meta name="theme-color" content="#00caff" />
   </Head>
 )

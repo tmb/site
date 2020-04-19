@@ -1,4 +1,4 @@
-import Head from 'next/head'
+import Meta from '../components/Meta'
 import FancyBox from '../components/FancyBox'
 import Bullet from '../components/Bullet'
 import NavBar from '../components/NavBar'
@@ -11,6 +11,7 @@ const Index = () => {
 
   return (
     <>
+      <Meta/>
       <NavBar fixed={true} />
       <div className="container">
         <FancyBox>

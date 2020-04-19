@@ -18,6 +18,9 @@ function MyApp({ Component, pageProps }) {
 					body {
 						margin: 0;
 						padding: 0;
+						a {
+							color: black;
+						}
 					}
 					* {
 						box-sizing: border-box;
