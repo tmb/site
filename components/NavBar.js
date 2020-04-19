@@ -29,8 +29,12 @@ const NavBar = ({ children, fixed }) => {
 				}
 				div {
 					height: 3rem;
-					width: 100vw;
-					position: ${fixed ? 'absolute' : 'relative'};
+					width: 100%;
+					position: relative;
+
+					@media (min-width: 48rem) {
+						position: ${fixed ? 'absolute' : 'relative'};
+					}
 					display: flex;
 					justify-content: center;
 					align-items: center;
@@ -39,7 +43,7 @@ const NavBar = ({ children, fixed }) => {
 					white-space: pre;
 				}
 				.line {
-					height: 1ch;
+					height: 1.2ch;
 					overflow: hidden;
 					position: absolute;
 					bottom: 0;

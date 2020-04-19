@@ -11,9 +11,6 @@ const Index = () => {
 
   return (
     <>
-      <Head>
-        <title>Theo Bleier</title>
-      </Head>
       <NavBar fixed={true} />
       <div className="container">
         <FancyBox>
@@ -68,10 +65,7 @@ const Index = () => {
 
           .grid {
             display: grid;
-          }
-
-          a {
-            color: white;
+            grid-gap: 1rem;
           }
 
           ul {
@@ -82,11 +76,26 @@ const Index = () => {
           .container {
             display: flex;
             place-items: center;
-            min-height: 100vh;
-            padding: 0 1rem;
+
+            @media (min-width: 48rem) {
+              min-height: 100vh;
+              margin-top: 0;
+              margin-bottom: 0;
+            }
+            
+            flex-grow: 1;
+
+            padding: 1rem;
           }
         `}
       </style>
+      <style jsx global>{`
+          #__next {
+              display: flex;
+              flex-direction: column;
+              min-height: 100vh;
+          }
+        `}</style>
     </>
   )
 }

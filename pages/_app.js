@@ -2,6 +2,7 @@
 import '../fonts.css'
 import ThemeContext from '../contexts/ThemeContext'
 import { useState } from 'react'
+import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
 	const themeHook = useState('light')
@@ -9,6 +10,9 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<>
 			<ThemeContext.Provider value={themeHook}>
+				<Head>
+					<title>Theo Bleier</title>
+				</Head>
 				<Component {...pageProps} />
 				<style jsx global>{`
 					body {
@@ -19,12 +23,15 @@ function MyApp({ Component, pageProps }) {
 						box-sizing: border-box;
 						margin: 0;
 						padding: 0;
-						font-family: cousine, Menlo, monospace;
+						font-family: "IBM Plex Mono", Menlo, monospace;
 					}
 					@media (prefers-color-scheme: dark) {
 						body {
 							background-color: #1e1e1e;
 							color: #fff;
+							a {
+								color: #fff;
+							}
 						}
 					}
 				`}</style>

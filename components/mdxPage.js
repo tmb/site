@@ -22,12 +22,16 @@ export default (meta) => ({ children }) => {
 				</style>
 				<style jsx>{`
 					.post {
-						margin-top: 4rem;
-						margin-bottom: 4rem;
 						margin-left: auto;
 						margin-right: auto;
+						padding: 4rem 1rem;
+						line-height: 1.625;
 
-						max-width: 48rem;
+						@media (min-width: 48rem) {
+            				max-width: 48rem;
+          				}
+
+						max-width: 32rem;
 						width: 100%;
 
 						position: relative;

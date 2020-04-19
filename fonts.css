@@ -1,13 +1,14 @@
 @font-face {
-  font-family: cousine;
-  font-weight: bold;
-  src: url("/fonts/Cousine-Bold.ttf") format("truetype");
+  font-family: "IBM Plex Mono";
+  font-weight: normal;
+  src: url("/fonts/IBMPlexMono-Regular.ttf") format("truetype");
   font-display: swap;
 }
+
 @font-face {
-  font-family: cousine;
-  font-weight: normal;
-  src: url("/fonts/Cousine-Regular.ttf") format("truetype");
+  font-family: "IBM Plex Mono";
+  font-weight: bold;
+  src: url("/fonts/IBMPlexMono-Bold.ttf") format("truetype");
   font-display: swap;
 }
 

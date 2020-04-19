@@ -32,7 +32,7 @@ const FancyBox = ({ children }) => {
       <style jsx>{`
         article {
           @media (min-width: 48rem) {
-            max-width: 83ch;
+            max-width: 85ch;
           }
           max-width: 29ch;
           width: 100%;
