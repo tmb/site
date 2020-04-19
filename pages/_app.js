@@ -4,7 +4,6 @@ import ThemeContext from '../contexts/ThemeContext'
 import { useState } from 'react'
 
 function MyApp({ Component, pageProps }) {
-
 	const themeHook = useState('light')
 
 	return (

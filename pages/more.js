@@ -5,6 +5,6 @@ export default () => {
 	let router = useRouter()
 	useEffect(() => {
 		router.replace('/about')
-	}, [])	
+	}, [])
 	return null
 }

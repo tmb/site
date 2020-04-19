@@ -1,8 +1,6 @@
 const FlexCenter = (props) => (
 	<>
-		<div>
-			{props.children}
-		</div>
+		<div>{props.children}</div>
 		<style jsx>{`
 			div {
 				display: flex;
@@ -13,6 +11,6 @@ const FlexCenter = (props) => (
 			}
 		`}</style>
 	</>
-	)
+)
 
 export default FlexCenter

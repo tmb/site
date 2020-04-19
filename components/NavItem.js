@@ -12,7 +12,9 @@ const NavItem = ({ name, link, children }) => {
 			<style jsx>{`
 				a {
 					font-weight: ${router.pathname == link ? 'bold' : 'normal'};
-					text-shadow: ${router.pathname == link ? '0px -1px 4px #00caff' : 'none'};
+					text-shadow: ${router.pathname == link
+						? '0px -1px 4px #00caff'
+						: 'none'};
 					color: black;
 					@media (prefers-color-scheme: dark) {
 						color: white;

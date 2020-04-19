@@ -1,7 +1,9 @@
 const Bullet = (props) => (
 	<>
 		<li>
-			<a target="_blank" href={props.href}>{props.children}</a>
+			<a target="_blank" href={props.href}>
+				{props.children}
+			</a>
 		</li>
 		<style jsx>{`
 			li {

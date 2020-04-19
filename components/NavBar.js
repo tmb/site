@@ -5,15 +5,16 @@ const NavBar = ({ children, fixed }) => {
 	const { width, height } = useWindowDimensions()
 
 	return (
-		<>
-			<div className="navBar">
-				<p className="logo">tmb.sh</p>
-				<NavItem link="/">home</NavItem>
-				<NavItem link="/about">about</NavItem>
-				{/* <NavItem link="/blog">blog</NavItem> */}
-				<NavItem link="/invitation">invitation</NavItem>
-				<nav aria-hidden className="line">{'-'.repeat(0.15 * width)}</nav>
-			</div>
+		<div>
+			<p className="logo">tmb.sh</p>
+			<NavItem link="/">home</NavItem>
+			<NavItem link="/about">about</NavItem>
+			{/* <NavItem link="/blog">blog</NavItem> */}
+			<NavItem link="/invitation">invitation</NavItem>
+			<nav aria-hidden className="line">
+				{'-'.repeat(0.15 * width)}
+			</nav>
+
 			<style jsx>{`
 				.logo {
 					position: absolute;
@@ -23,10 +24,10 @@ const NavBar = ({ children, fixed }) => {
 					display: none;
 
 					@media (min-width: 32rem) {
-          				display: block;
-      				}
+						display: block;
+					}
 				}
-				.navBar {
+				div {
 					height: 3rem;
 					width: 100vw;
 					position: ${fixed ? 'absolute' : 'relative'};
@@ -45,7 +46,7 @@ const NavBar = ({ children, fixed }) => {
 					left: 0;
 				}
 			`}</style>
-		</>
+		</div>
 	)
 }
 
