@@ -43,7 +43,7 @@ const NavBar = ({ children, fixed }) => {
 					white-space: pre;
 				}
 				.line {
-					height: 1.2ch;
+					height: 1.3ch;
 					overflow: hidden;
 					position: absolute;
 					bottom: 0;
