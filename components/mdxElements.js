@@ -30,7 +30,11 @@ const A = ({ href, children }) => {
 			{children}
 			<style jsx>{`
 				a {
-					color: #00caff;
+					@media (prefers-color-scheme: dark) {
+						color: #00caff;
+					}
+
+					color: #007d9e;
 				}
 			`}</style>
 		</a>
