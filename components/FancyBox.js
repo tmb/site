@@ -34,7 +34,7 @@ const FancyBox = ({ children }) => {
           @media (min-width: 48rem) {
             max-width: 85ch;
           }
-          max-width: 29ch;
+          max-width: 31ch;
           width: 100%;
           margin: auto;
           padding: 2rem;
