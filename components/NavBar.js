@@ -48,7 +48,7 @@ const NavBar = ({ children, fixed }) => {
 					position: absolute;
 					bottom: 0;
 					left: 0;
-					width: 100vw;
+					width: 100%;
 				}
 			`}</style>
 		</div>
