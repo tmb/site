@@ -1,20 +1,33 @@
 import NavBar from './NavBar'
+import Meta from './Meta'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { MDXProvider } from '@mdx-js/react'
 import components from './mdxElements'
-import Meta from '../components/Meta'
+import { useRouter } from 'next/router'
 
 export default (meta) => ({ children }) => {
+  const router = useRouter()
+
   return (
     <MDXProvider components={components}>
-			<Meta title={meta.title} />
+      <Meta
+        title={"Theo Bleier's Blog - " + meta.title}
+        description={meta.description}
+        url={'https://tmb.sh' + router.pathname}
+      />
       <Head>
         <title>Theo Bleier | {meta.title}</title>
       </Head>
       <NavBar />
       <div className="post">
+        <Link href="/blog">
+          <a>← Back to index</a>
+        </Link>
+        <div className="info">
+          <h1>{meta.title}</h1>
+          <span className="signa">Written on {meta.date} by Theo</span>
+        </div>
         {children}
         <style jsx global>
           {`
@@ -27,7 +40,7 @@ export default (meta) => ({ children }) => {
           .post {
             margin-left: auto;
             margin-right: auto;
-            padding: 4rem 1rem;
+            padding: 4rem 2rem;
             line-height: 1.625;
 
             @media (min-width: 48rem) {
@@ -38,6 +51,13 @@ export default (meta) => ({ children }) => {
             width: 100%;
 
             position: relative;
+
+            .info {
+              margin-bottom: 1.25rem;
+              h1 {
+                margin-bottom: -0.5rem;
+              }
+            }
           }
         `}</style>
       </div>

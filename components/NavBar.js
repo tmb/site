@@ -8,8 +8,8 @@ const NavBar = ({ children, fixed }) => {
 		<div>
 			<p className="logo">tmb.sh</p>
 			<NavItem link="/">home</NavItem>
+			<NavItem link="/blog">blog</NavItem>
 			<NavItem link="/about">about</NavItem>
-			{/* <NavItem link="/blog">blog</NavItem> */}
 			<NavItem link="/invitation">invitation</NavItem>
 			<nav aria-hidden className="line">
 				{'-'.repeat(0.15 * width)}

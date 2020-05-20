@@ -1,10 +1,10 @@
-import Meta from '../components/Meta'
 import FancyBox from '../components/FancyBox'
 import Bullet from '../components/Bullet'
 import NavBar from '../components/NavBar'
 import Link from 'next/link'
 import { useContext } from 'react'
 import ThemeContext from '../contexts/ThemeContext'
+import Meta from '../components/Meta'
 
 const Index = () => {
   const [theme, setTheme] = useContext(ThemeContext)
@@ -83,7 +83,7 @@ const Index = () => {
               margin-top: 0;
               margin-bottom: 0;
             }
-            
+
             flex-grow: 1;
 
             padding: 1rem;
@@ -91,12 +91,12 @@ const Index = () => {
         `}
       </style>
       <style jsx global>{`
-          #__next {
-              display: flex;
-              flex-direction: column;
-              min-height: 100vh;
-          }
-        `}</style>
+        #__next {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+      `}</style>
     </>
   )
 }
