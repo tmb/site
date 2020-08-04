@@ -3,7 +3,7 @@ import Head from 'next/head'
 export default ({
   name = 'Theo Bleier',
   title = 'Theo Bleier',
-  description = 'Theo Bleier is a 16-year-old hacker. Right now, he works at Hack Club wearing many hats.',
+  description = 'Theo Bleier is a 16-year-old hacker. Right now, he works at Hack Club, wearing many hats.',
   image = 'https://tmb.sh/card.png',
   url = 'https://tmb.sh',
 }) => (
