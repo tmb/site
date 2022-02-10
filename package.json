@@ -24,7 +24,7 @@
     "tempy": "^0.5.0"
   },
   "devDependencies": {
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "styled-jsx-plugin-sass": "^1.0.0"
   }
 }
