@@ -1,24 +1,27 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-const NavItem = ({ name, link, children }) => {
-	const router = useRouter()
-	
-	const highlightCheck = (link) => {
-		if (router.pathname.includes('posts') && link == "/blog") {
-			return true;
-		}
+const NavItem = ({ name, link, children, noDivider }) => {
+  const router = useRouter()
 
-		return false;
-	}
+  const highlightCheck = (link) => {
+    if (router.pathname.includes('posts') && link == '/blog') {
+      return true
+    }
+
+    return false
+  }
 
   return (
     <>
-      <Link href={link}>
-        <a>{children}</a>
-      </Link>
+      <div className="nav-item">
+        <Link href={link}>
+          <p className="link">{children}</p>
+        </Link>
+        {!noDivider && <p className="divider">||</p>}
+      </div>
       <style jsx>{`
-        a {
+        .link {
           font-weight: ${router.pathname == link || highlightCheck(link)
             ? 'bold'
             : 'normal'};
@@ -30,16 +33,14 @@ const NavItem = ({ name, link, children }) => {
             color: white;
           }
         }
-      `}</style>
-      <style jsx>{`
-        a + a:before {
-          content: ' || ';
-          text-decoration: none;
-          text-shadow: none;
-          font-weight: normal;
-          display: inline-block;
-          white-space: pre;
-          pointer-events: none;
+
+        .divider {
+          margin: 0 1ch;
+          user-select: none;
+        }
+
+        div {
+          display: flex;
         }
 
         @media (prefers-color-scheme: dark) {

@@ -11,7 +11,7 @@ const Index = () => {
 
   return (
     <>
-      <Meta/>
+      <Meta />
       <NavBar fixed={true} />
       <div className="container">
         <FancyBox>
@@ -32,9 +32,7 @@ const Index = () => {
               </ul>
 
               <p>
-                <Link href="/about">
-                  <a>[more]</a>
-                </Link>
+                <Link href="/about">[more]</Link>
                 (/more)
               </p>
             </div>

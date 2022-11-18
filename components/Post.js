@@ -4,10 +4,10 @@ const Post = ({ meta }) => {
   return (
     <div>
       <div className="info">
-        <Link href={meta.path}>
-          <a>{meta.title}</a>
-        </Link>
-        <span className="date">{new Date(meta.date).toLocaleDateString('en-US')} in {meta.in}</span>
+        <Link href={meta.path}>{meta.title}</Link>
+        <span className="date">
+          {new Date(meta.date).toLocaleDateString('en-US')} in {meta.in}
+        </span>
       </div>
       <p>{meta.description}</p>
       <style jsx>{`

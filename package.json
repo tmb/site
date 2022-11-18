@@ -12,19 +12,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mdx-js/loader": "^1.6.1",
-    "@next/mdx": "^9.3.6",
-    "airtable": "^0.8.1",
+    "@mdx-js/loader": "^2.1.5",
+    "@mdx-js/react": "^2.1.5",
+    "@next/mdx": "^13.0.4",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
-    "import-jsx": "^4.0.0",
-    "next": "^9.3.6",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "tempy": "^0.5.0"
+    "next": "^13.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "node-sass": "^4.14.1",
-    "styled-jsx-plugin-sass": "^1.0.0"
+    "@styled-jsx/plugin-sass": "^4.0.2",
+    "sass": "^1.56.1"
   }
 }
