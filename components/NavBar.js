@@ -15,9 +15,8 @@ const NavBar = ({ children, fixed }) => {
       <p className="logo">tmb.sh</p>
       <div className="nav-items">
         <NavItem link="/">home</NavItem>
-        <NavItem link="/about">about</NavItem>
-        <NavItem link="/invitation" noDivider={true}>
-          invitation
+        <NavItem link="/about" noDivider={true}>
+          about
         </NavItem>
       </div>
 
