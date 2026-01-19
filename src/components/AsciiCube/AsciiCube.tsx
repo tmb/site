@@ -176,40 +176,68 @@ export default function AsciiCube() {
     );
   };
 
+  // Track when drag ends to trigger smooth transition back
+  const dragEndedRef = useRef(false);
+
   const handleMouseUp = () => {
-    isDraggingRef.current = false;
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      dragEndedRef.current = true;
+    }
   };
 
   const handleMouseLeave = () => {
-    isDraggingRef.current = false;
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      dragEndedRef.current = true;
+    }
   };
 
-  // Touch event handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    isDraggingRef.current = true;
-    const touch = e.touches[0];
-    dragStartPointRef.current = getArcballPoint(touch.clientX, touch.clientY);
-    dragStartOrientationRef.current = [...orientationRef.current];
-    e.preventDefault();
-  };
+  // Touch event listeners - attached via useEffect with { passive: false } to allow preventDefault
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDraggingRef.current) return;
+    const handleTouchStart = (e: TouchEvent) => {
+      isDraggingRef.current = true;
+      const touch = e.touches[0];
+      dragStartPointRef.current = getArcballPoint(touch.clientX, touch.clientY);
+      dragStartOrientationRef.current = [...orientationRef.current];
+      e.preventDefault();
+    };
 
-    const touch = e.touches[0];
-    const currentPoint = getArcballPoint(touch.clientX, touch.clientY);
-    const rotation = computeArcballRotation(
-      dragStartPointRef.current,
-      currentPoint
-    );
-    orientationRef.current = quatNormalize(
-      quatMultiply(rotation, dragStartOrientationRef.current)
-    );
-  };
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDraggingRef.current) return;
+      e.preventDefault();
 
-  const handleTouchEnd = () => {
-    isDraggingRef.current = false;
-  };
+      const touch = e.touches[0];
+      const currentPoint = getArcballPoint(touch.clientX, touch.clientY);
+      const rotation = computeArcballRotation(
+        dragStartPointRef.current,
+        currentPoint
+      );
+      orientationRef.current = quatNormalize(
+        quatMultiply(rotation, dragStartOrientationRef.current)
+      );
+    };
+
+    const handleTouchEnd = () => {
+      if (isDraggingRef.current) {
+        isDraggingRef.current = false;
+        dragEndedRef.current = true;
+      }
+    };
+
+    container.addEventListener("touchstart", handleTouchStart, { passive: false });
+    container.addEventListener("touchmove", handleTouchMove, { passive: false });
+    container.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
+      container.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, []);
 
   // Animation loop
   useEffect(() => {
@@ -249,6 +277,20 @@ export default function AsciiCube() {
       // Apply animation when not dragging
       if (!isDraggingRef.current) {
         const currentTime = timestamp / 1000;
+
+        // Handle transition back from drag
+        if (dragEndedRef.current) {
+          dragEndedRef.current = false;
+          isShowingFace = false;
+          transitionStart = currentTime;
+          transitionFromOrientation = [...orientationRef.current];
+          // Move to next letter in sequence (T → M → B → T → ...)
+          targetLetterIndex =
+            (currentLetterIndex + 1) % LETTER_SEQUENCE.length;
+          // Randomly select one of the two faces showing this letter
+          const faces = FACE_ORIENTATIONS[LETTER_SEQUENCE[targetLetterIndex]];
+          targetFaceIndex = Math.floor(Math.random() * faces.length);
+        }
 
         if (isShowingFace) {
           // Show face with exact pre-computed quaternion
@@ -320,14 +362,11 @@ export default function AsciiCube() {
   return (
     <pre
       ref={containerRef}
-      className="select-none cursor-grab active:cursor-grabbing w-fit"
+      className="select-none cursor-grab active:cursor-grabbing w-fit touch-none"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
     >
       {frame}
     </pre>
