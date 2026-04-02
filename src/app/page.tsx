@@ -20,13 +20,13 @@ export default function Home() {
         <main className="max-w-xl">
           <h1 className="font-bold mb-4">Theo Bleier (@tmb)</h1>
           <p className="mb-4">
-            I work on AI at{' '}
+            I work at{' '}
             <a
-              href="https://notion.so"
+              href="https://simile.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Notion
+              Simile
             </a>
             .
           </p>{' '}
