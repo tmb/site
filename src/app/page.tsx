@@ -20,20 +20,9 @@ export default function Home() {
         <main className="max-w-xl">
           <h1 className="font-bold mb-4">Theo Bleier (@tmb)</h1>
           <p className="mb-4">
-            I work at{' '}
-            <a
-              href="https://simile.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Simile
-            </a>
-            .
-          </p>{' '}
-          <p className="mb-4">
-            My primary interests lie in engineering, understanding how people
+            My interests lie in engineering, understanding how people
             work together, and how technological progress will change the fabric
-            of our economy. I also like to go on really long walks.
+            of our economy. I like to go on really long walks.
           </p>
           <p className="mb-4">
             I live in San Francisco, CA, where I moved after spending most of my
