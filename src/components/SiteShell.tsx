@@ -10,7 +10,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      className="mt-12 min-h-screen p-8 md:pl-[--balanced-left-padding]"
+      className="min-h-screen p-8 pt-20 md:pl-[--balanced-left-padding]"
       style={
         {
           '--balanced-left-padding': `${balancedLeftPaddingPx}px`,

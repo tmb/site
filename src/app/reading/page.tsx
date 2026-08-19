@@ -12,7 +12,7 @@ interface Section {
 
 const sections: Section[] = [
   {
-    title: 'Corporate jiu-jitsu',
+    title: 'How people work',
     notes: [
       'It is not gauche to understand how to understand others’ incentives. Working with others is the primary lever we have to accomplish hard things; we should strive to be good at it.',
     ],
