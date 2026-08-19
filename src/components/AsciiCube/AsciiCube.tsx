@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import type { Point3D, Quaternion } from "./types";
 import {
@@ -106,6 +107,21 @@ export default function AsciiCube() {
   const [frame, setFrame] = useState<string>(() =>
     renderFrame(INITIAL_ORIENTATION)
   );
+
+  // The cube always auto-plays on the "me" page ("/"), and pauses on the T
+  // face everywhere else (where a "play >" control lets you resume it).
+  const pathname = usePathname();
+  const [isPlaying, setIsPlaying] = useState(pathname === "/");
+  const playingRef = useRef(pathname === "/");
+
+  // Reset play state on navigation: playing on "/", paused elsewhere.
+  useEffect(() => {
+    setIsPlaying(pathname === "/");
+  }, [pathname]);
+
+  useEffect(() => {
+    playingRef.current = isPlaying;
+  }, [isPlaying]);
 
   // Animation and interaction state refs
   const orientationRef = useRef<Quaternion>([...INITIAL_ORIENTATION]);
@@ -255,6 +271,7 @@ export default function AsciiCube() {
     ];
     let targetLetterIndex = 0;
     let targetFaceIndex = 0;
+    let wasPlaying = playingRef.current;
 
     // Timing constants (in seconds)
     const FACE_SHOW_DURATION = 0.5; // How long to pause on each face
@@ -277,6 +294,30 @@ export default function AsciiCube() {
       // Apply animation when not dragging
       if (!isDraggingRef.current) {
         const currentTime = timestamp / 1000;
+        const playing = playingRef.current;
+
+        // On resume (paused → playing), restart the sequence from the T face.
+        if (playing && !wasPlaying) {
+          currentLetterIndex = 0;
+          currentFaceIndex = 0;
+          isShowingFace = true;
+          faceShowStart = currentTime;
+          dragEndedRef.current = false;
+        }
+        wasPlaying = playing;
+
+        if (!playing) {
+          // Paused: ease back to the T face and hold there.
+          dragEndedRef.current = false;
+          orientationRef.current = quatSlerp(
+            orientationRef.current,
+            FACE_ORIENTATIONS.T[0],
+            0.15
+          );
+          setFrame(renderFrame(orientationRef.current));
+          animationFrameRef.current = requestAnimationFrame(animate);
+          return;
+        }
 
         // Handle transition back from drag
         if (dragEndedRef.current) {
@@ -360,15 +401,27 @@ export default function AsciiCube() {
   }, []);
 
   return (
-    <pre
-      ref={containerRef}
-      className="select-none cursor-grab active:cursor-grabbing w-fit touch-none"
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseLeave}
-    >
-      {frame}
-    </pre>
+    <div className="flex flex-col items-center w-fit">
+      <pre
+        ref={containerRef}
+        className="select-none cursor-grab active:cursor-grabbing w-fit touch-none"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
+      >
+        {frame}
+      </pre>
+      {!isPlaying && (
+        <button
+          type="button"
+          onClick={() => setIsPlaying(true)}
+          className="-mt-[56px] hover:underline"
+          aria-label="Play cube animation"
+        >
+          play &gt;
+        </button>
+      )}
+    </div>
   );
 }

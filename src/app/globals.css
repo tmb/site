@@ -19,6 +19,21 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* Roomier line-height for page body content only (not the sidebar) */
+main {
+  line-height: 1.75;
+}
+
+/* Trim the half-leading above the first line so the sidebar name and the first
+   line of body content share an exact cap-height top, independent of each
+   element's line-height or weight. Progressive enhancement: silently no-ops in
+   browsers without text-box-trim (falls back to sub-pixel alignment). */
+aside .font-bold,
+main :first-child {
+  text-box-trim: trim-start;
+  text-box-edge: cap alphabetic;
+}
+
 /* Plain text link styling */
 a {
   color: var(--text);
@@ -26,6 +41,11 @@ a {
 }
 
 a:hover {
+  text-decoration: underline;
+}
+
+/* Links within page body content are always underlined */
+main a {
   text-decoration: underline;
 }
 

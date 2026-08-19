@@ -14,10 +14,14 @@ Personal website for Theo Bleier featuring an interactive 3D ASCII art cube.
 ```
 src/
 ├── app/
-│   ├── page.tsx          # Main page with bio + cube layout
-│   ├── layout.tsx        # Root layout with font setup
+│   ├── page.tsx          # "me" page content (bio paragraphs only)
+│   ├── writing/page.tsx  # Substack posts list (RSS feed, ISR)
+│   ├── not-banks/page.tsx# "(not) banks" list content
+│   ├── layout.tsx        # Root layout: font setup + wraps children in SiteShell
 │   └── globals.css       # Global styles
 └── components/
+    ├── SiteShell.tsx     # Shared layout: sidebar + <main> slot + cube (in layout, so cube persists across navigation)
+    ├── Sidebar.tsx       # Left nav; name + dashed rule, nav links, socials; bolds active route via usePathname
     ├── ThemeToggle.tsx   # Light/dark mode toggle (currently disabled)
     └── AsciiCube/
         ├── index.ts      # Re-export
@@ -46,6 +50,8 @@ The cube renders a 3D wireframe with letters (T, M, B) on faces:
 
 4. **Interaction**: Supports mouse/touch drag via arcball rotation.
 
+5. **Route-aware play/pause** (`usePathname`): auto-plays only on the "me" page (`/`). On any other route it eases back to the T face and holds, showing a `play >` control to resume. State resets on navigation.
+
 ### Key Constants
 - Canvas: 38 chars wide × 24 chars tall
 - Face: 25×15 chars (240×240 pixels at 9.6×16 char size)
@@ -54,61 +60,58 @@ The cube renders a 3D wireframe with letters (T, M, B) on faces:
 
 ---
 
-## Aligning Text with ASCII Cube Top
+## Pages & Content
 
-### Goal
-Align the top of text (e.g., "Theo Bleier") with the top of the cube's visual content (the dotted border).
+`layout.tsx` wraps every route in `SiteShell` (sidebar + `<main>` slot + cube), so pages only render their inner content. `Sidebar.tsx` bolds the active route via `usePathname`.
 
-### Key Insight
-The cube's `<pre>` element has **empty lines at the top** before the visual content starts. These must be offset with a negative margin.
+- **`/` (me)** — bio paragraphs.
+- **`/writing`** — lists Substack posts. Server component fetches `https://theombl.substack.com/feed` (RSS), parses `<item>` blocks with regex (title/link/pubDate), sorts newest-first, renders `- **title** (date)`. Uses ISR: `export const revalidate = 3600` (hourly). No API key; if the fetch fails it renders an empty-state.
+- **`/not-banks`** — static list of companies with bank-like operations.
+- **`/reading`** — static reading list grouped by category (bold `<h2>` headers, optional intro notes, posts as dashed `<li>` items). Post data lives inline in the page as a `sections` array; items become links only when a `href` is present (most are text pending URLs).
 
-### Measurement Process
+### Styling conventions (`globals.css`)
+- Light/dark follow OS `prefers-color-scheme` via CSS vars (`--bg`, `--text`); no manual toggle (`ThemeToggle` is disabled).
+- Body links (`main a`) are **always underlined**; sidebar/nav links are not (bracketed `[ label ]` style, underline on hover only).
 
-1. **Stop the animation** to get consistent measurements:
-   ```tsx
-   let isRunning = false; // in useEffect
-   ```
+---
 
-2. **Measure positions via browser JS**:
-   ```js
-   // Count empty lines at top of cube
-   const lines = cubePreElement.textContent.split('\n');
-   let emptyCount = 0;
-   for (const line of lines) {
-     if (line.trim().length === 0) emptyCount++;
-     else break;
-   }
+## Top-Line Alignment (sidebar name · body text · cube)
 
-   // Calculate visual top of cube content
-   const lineHeight = 16; // px
-   const cubeVisualTop = cubePreTop + (emptyCount * lineHeight);
+Three things must share the same top edge: the **sidebar name**, the **first line of `<main>` body text**, and the **cube's dotted top border**. They live in three different type contexts (bold vs regular weight, different line-heights, and the cube "top" is a row of `.` periods, not letters), so there's no single shared baseline grid. It's solved in two independent pieces.
 
-   // h1 text has 4px offset due to line-height centering (24px line-height, 16px font)
-   const h1TextTop = h1BoxTop + 4;
+### 1. Sidebar name ↔ body text — exact match via `text-box-trim`
 
-   // Difference tells you how much to adjust
-   const adjustment = cubeVisualTop - h1TextTop;
-   ```
-
-3. **Apply negative margin** to cube container:
-   ```tsx
-   <div className="md:-mt-[Xpx]">
-     <AsciiCube />
-   </div>
-   ```
-   Where `X = emptyLines × lineHeight + h1LineHeightOffset`
-
-### Formula
+`globals.css` trims the half-leading above the first line of both, snapping each first line's **cap-height to its box top**:
+```css
+main { line-height: 1.75; }
+aside .font-bold,          /* the sidebar name (nav uses font-extrabold, not matched) */
+main :first-child {        /* first text block on every page: <p>, nested <p>, or <li> */
+  text-box-trim: trim-start;
+  text-box-edge: cap alphabetic;
+}
 ```
-margin-top = -(CUBE_TOP_WHITESPACE_CHARS × CHAR_HEIGHT_PX + 4px)
-           = -(5 × 16 + 4)
-           = -84px (base)
+Because both boxes start at the same `md:items-start` flex-row top and cap-height is a font-wide constant, their tops become **exactly equal (0.00px)** — independent of line-height or weight. Verified 0px on `/`, `/writing`, `/not-banks`.
+
+- **Why this over just centering:** line-box centering depends on line-height *and* per-weight ascent, so bold name vs regular body never quite matched (best was ~0.26px, a lucky cancellation; nudging line-heights re-broke it). `text-box-trim` removes that coupling entirely.
+- **Structural requirement:** the trimmed element needs a real line box. The `/writing` `<li>` was therefore changed from `flex` to a plain text block (inline `-` dash, like `/not-banks`); a `flex` container has no line box and the trim silently no-ops.
+- **Browser support:** Chrome 133+ / Safari 18.2+. **Firefox has no support yet** — it no-ops back to the ~0.26px centering fallback (imperceptible). Progressive enhancement, safe to ship.
+
+### 2. Cube dotted border — visual `-mt` tune
+
+```tsx
+<div className="md:-mt-[98px] ..."><AsciiCube /></div>   // SiteShell.tsx
 ```
+The cube `<pre>` is a third coordinate system (line-height 1, and its "top" is periods that render near the *baseline*, low in their line box). It can't join the cap-height grid, so it's aligned **by eye**, not by metric. Guidance:
+- Strict glyph-top alignment reads as sitting through the *middle* of the text; the visually-correct spot sits the dotted rule a few px higher. `-98px` puts the dots ~4.5px above the body cap-top, which reads as "at the top".
+- This value depends on where the body text lands. If you change `main`'s line-height or the trim, the body first line moves and the cube `-mt` must be re-tuned (~1px per 1px of text shift). The trim currently pins the body cap-top, so line-height changes alone no longer move it.
+- **Always confirm with a screenshot** — don't chase the metric to 0.
 
-Then fine-tune based on actual measurements. Final value: **-92px** (includes additional offset for dot baseline vs text ascender positioning).
-
-### Verification
-Re-measure after each adjustment until `cubeVisualTop - h1TextTop ≈ 0`.
+### Verification (browser JS, on a static non-"me" route)
+```js
+const nameTop = document.querySelector('aside .font-bold').getBoundingClientRect().top; // == cap-top after trim
+const bodyTop = document.querySelector('main p, main li').getBoundingClientRect().top;   // == cap-top after trim
+// nameTop - bodyTop should be ~0.00
+```
 
 ---
 
@@ -127,7 +130,7 @@ The cube canvas is wider than the cube content. At head-on view, there's whitesp
    export const CUBE_RIGHT_WHITESPACE_PX = (CANVAS_WIDTH - CUBE_HEADON_RIGHT_CHAR) * CHAR_WIDTH_PX;
    ```
 
-2. Apply extra left padding only on desktop (md+):
+2. Apply extra left padding only on desktop (md+), in `SiteShell.tsx`:
    ```tsx
    <div
      className="min-h-screen p-8 md:pl-[--balanced-left-padding]"
