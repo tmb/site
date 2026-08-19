@@ -12,7 +12,7 @@ interface Section {
 
 const sections: Section[] = [
   {
-    title: 'Corporate jujitsu',
+    title: 'Corporate jiu-jitsu',
     notes: [
       'It is not gauche to understand how to understand others’ incentives. Working with others is the primary lever we have to accomplish hard things; we should strive to be good at it.',
     ],
@@ -175,7 +175,10 @@ const sections: Section[] = [
 // Last name of the (first) author, used to sort sections alphabetically.
 // Strips parentheticals ("(rands)") and takes the first of multiple authors.
 function lastName(author: string): string {
-  const primary = author.split(/\s+and\s+/)[0].replace(/\s*\([^)]*\)/g, '').trim()
+  const primary = author
+    .split(/\s+and\s+/)[0]
+    .replace(/\s*\([^)]*\)/g, '')
+    .trim()
   const parts = primary.split(/\s+/)
   return parts[parts.length - 1].toLowerCase()
 }
@@ -209,7 +212,9 @@ export default function Reading() {
           ))}
           <ul className="flex flex-col">
             {[...section.posts]
-              .sort((a, b) => lastName(a.author).localeCompare(lastName(b.author)))
+              .sort((a, b) =>
+                lastName(a.author).localeCompare(lastName(b.author)),
+              )
               .map((post) => (
                 <PostItem key={post.title} {...post} />
               ))}
